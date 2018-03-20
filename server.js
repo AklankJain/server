@@ -7,8 +7,10 @@ app.get('/', function (req, res) {
   res.send('Hello Node + GitHub! This code push has auto-deployed!');
 });
 
+var port = process.env.PORT
+
  // Listen to port 5000
- app.listen(5000, function () {
+ app.listen(port, function () {
    console.log('Dev app listening on port 5000!');
  });
 
