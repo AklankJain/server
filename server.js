@@ -41,17 +41,95 @@ app.use(function(req, res, next) {
 //      res.send('Hello Dev!');
 //  });
 
-router.get('/', function(req, res) {
-    res.send('im the home page!');  
+router.get('/api', function(req, res) {
+    res.send('Api Initialized!');  
 });
 
 // about page route (http://localhost:8080/about)
-router.get('/about', function(req, res) {
-    res.send('im the about page!'); 
+// router.get('/about', function(req, res) {
+//     res.send('im the about page!'); 
+// });
+
+
+//adding the /comments route to our /api router
+router.route('/comments')
+  //retrieve all comments from the database
+  .get(function(req, res) {
+    //looks at our Comment Schema
+    Comment.find(function(err, comments) {
+      if (err)
+        res.send(err);
+      //responds with a json object of our database comments.
+      res.json(comments)
+    });
+  })
+  //post new comment to the database
+  .post(function(req, res) {
+    var comment = new Comment();
+    //body parser lets us use the req.body
+    comment.author = req.body.author;
+    comment.text = req.body.text;
+
+    comment.save(function(err) {
+      if (err)
+        res.send(err);
+      res.json({ message: 'Comment successfully added!' });
+    });
+  });
+
+router.route('/update')
+	 .get(function(req, res) {
+    //looks at our Comment Schema
+    Comment.find(function(err, comments) {
+      if (err)
+        res.send(err);
+      //responds with a json object of our database comments.
+      res.json(comments)
+    });	
+  })
+
+	.put(function(req, res){
+		if (req.body.tags == 'hungry_rides') {
+	 Comment.update({ '_id' :  '5a9bb241fbb02820ac09dc61' } ,
+    { $push: { 'hungry_rides' :  {'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
+    {upsert: true},
+    function(err, doc) {
+        if(err){
+        console.log(err)
+        }else{
+        res.json({ message: 'Comment successfully updated! hungry_rides' });	
+        //do stuff
+        }
+       })
+    }
+    else if(req.body.tags == 'food_walks'){
+    	Comment.update({ '_id' :  '5a9bb241fbb02820ac09dc61' } ,
+    { $push: { 'food_walks' :  {'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
+    {upsert: true},
+    function(err, doc) {
+        if(err){
+        console.log(err)
+        }else{
+        res.json({ message: 'Comment successfully updated! food_walks' });	
+    }
+})
+ }
+ else if(req.body.tags == 'about'){
+ 	  	Comment.update({ '_id' :  '5a9bb241fbb02820ac09dc61' } ,
+    { $push: { 'about' :  {'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
+    {upsert: true},
+    function(err, doc) {
+        if(err){
+        console.log(err)
+        }else{
+        res.json({ message: 'Comment successfully updated!  about' });	
+    }
+})
+ }
 });
 
 // apply the routes to our application
-app.use('/', router);
+app.use('/api', router);
 
 
 
@@ -68,83 +146,9 @@ app.listen(port, function () {
 // });
 
 
-// //adding the /comments route to our /api router
-// router.route('/comments')
-//   //retrieve all comments from the database
-//   .get(function(req, res) {
-//     //looks at our Comment Schema
-//     Comment.find(function(err, comments) {
-//       if (err)
-//         res.send(err);
-//       //responds with a json object of our database comments.
-//       res.json(comments)
-//     });
-//   })
-//   //post new comment to the database
-//   .post(function(req, res) {
-//     var comment = new Comment();
-//     //body parser lets us use the req.body
-//     comment.author = req.body.author;
-//     comment.text = req.body.text;
-
-//     comment.save(function(err) {
-//       if (err)
-//         res.send(err);
-//       res.json({ message: 'Comment successfully added!' });
-//     });
-//   });
 
 
-// router.route('/update')
-// 	 .get(function(req, res) {
-//     //looks at our Comment Schema
-//     Comment.find(function(err, comments) {
-//       if (err)
-//         res.send(err);
-//       //responds with a json object of our database comments.
-//       res.json(comments)
-//     });	
-//   })
 
-// 	.put(function(req, res){
-// 		if (req.body.tags == 'hungry_rides') {
-// 	 Comment.update({ '_id' :  '5a9bb241fbb02820ac09dc61' } ,
-//     { $push: { 'hungry_rides' :  {'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
-//     {upsert: true},
-//     function(err, doc) {
-//         if(err){
-//         console.log(err)
-//         }else{
-//         res.json({ message: 'Comment successfully updated! hungry_rides' });	
-//         //do stuff
-//         }
-//        })
-//     }
-//     else if(req.body.tags == 'food_walks'){
-//     	Comment.update({ '_id' :  '5a9bb241fbb02820ac09dc61' } ,
-//     { $push: { 'food_walks' :  {'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
-//     {upsert: true},
-//     function(err, doc) {
-//         if(err){
-//         console.log(err)
-//         }else{
-//         res.json({ message: 'Comment successfully updated! food_walks' });	
-//     }
-// })
-//  }
-//  else if(req.body.tags == 'about'){
-//  	  	Comment.update({ '_id' :  '5a9bb241fbb02820ac09dc61' } ,
-//     { $push: { 'about' :  {'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
-//     {upsert: true},
-//     function(err, doc) {
-//         if(err){
-//         console.log(err)
-//         }else{
-//         res.json({ message: 'Comment successfully updated!  about' });	
-//     }
-// })
-//  }
-// });
 // //Use our router configuration when we call /api
 // app.use('/api', router);
 
