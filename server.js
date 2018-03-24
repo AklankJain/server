@@ -124,10 +124,10 @@ router.route('/update')
         }else{
         res.json({ message: 'Comment successfully updated!  about' });	
     }
-})
- }
 });
-  .delete(function(req , res){
+ }
+})
+.delete(function(req , res){
     Comment.remove({ '_id' :  '5a9bb241fbb02820ac09dc61' },
      function(err, comment) {
      if (err)
