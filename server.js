@@ -127,6 +127,14 @@ router.route('/update')
 })
  }
 });
+  .delete(function(req , res){
+    Comment.remove({ '_id' :  '5a9bb241fbb02820ac09dc61' },
+     function(err, comment) {
+     if (err)
+       res.send(err);
+     res.json({ message: 'Comment has been deleted' })
+   })
+ });
 
 // apply the routes to our application
 app.use('/api', router);
