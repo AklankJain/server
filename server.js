@@ -90,8 +90,8 @@ router.route('/update')
 
 	.put(function(req, res){
 		if (req.body.tags == 'hungry_rides') {
-	 Comment.update({ '_id' :  '5a9bb241fbb02820ac09dc61' } ,
-    { $push: { 'hungry_rides' :  {'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
+	 Comment.update({ '_id' :  '5ab5c14f91ab610004ced8ac' } ,
+    { $push: { 'hungry_rides' :  { 'key' : req.body.key, 'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
     {upsert: true},
     function(err, doc) {
         if(err){
@@ -103,8 +103,8 @@ router.route('/update')
        })
     }
     else if(req.body.tags == 'food_walks'){
-    	Comment.update({ '_id' :  '5a9bb241fbb02820ac09dc61' } ,
-    { $push: { 'food_walks' :  {'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
+    	Comment.update({ '_id' :  '5ab5c14f91ab610004ced8ac' } ,
+    { $push: { 'food_walks' :  {'key' : req.body.key,'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
     {upsert: true},
     function(err, doc) {
         if(err){
@@ -115,8 +115,8 @@ router.route('/update')
 })
  }
  else if(req.body.tags == 'about'){
- 	  	Comment.update({ '_id' :  '5a9bb241fbb02820ac09dc61' } ,
-    { $push: { 'about' :  {'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
+ 	  	Comment.update({ '_id' :  '5ab5c14f91ab610004ced8ac' } ,
+    { $push: { 'about' :  {'key' : req.body.key,'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
     {upsert: true},
     function(err, doc) {
         if(err){
@@ -128,7 +128,7 @@ router.route('/update')
  }
 })
 .delete(function(req , res){
-    Comment.remove({ '_id' :  '5a9bb241fbb02820ac09dc61' },
+    Comment.remove({ '_id' :  '5ab5c14f91ab610004ced8ac' },
      function(err, comment) {
      if (err)
        res.send(err);
