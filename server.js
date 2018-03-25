@@ -89,6 +89,7 @@ router.route('/update')
   })
 
 	.put(function(req, res){
+		console.log(req.body)
 		if (req.body.tags == 'hungry_rides') {
 	 Comment.update({ '_id' :  '5ab715b369d5cf000401d511' } ,
     { $push: { 'hungry_rides' :  { 'key' : req.body.key, 'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
