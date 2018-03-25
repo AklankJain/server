@@ -89,9 +89,8 @@ router.route('/update')
   })
 
 	.put(function(req, res){
-		console.log(req.body)
 		if (req.body.tags == 'hungry_rides') {
-	 Comment.update({ '_id' :  '5ab715b369d5cf000401d511' } ,
+	 Comment.update({ '_id' :  '5ab7f327e6a9250004139143' } ,
     { $push: { 'hungry_rides' :  { 'key' : req.body.key, 'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
     {upsert: true},
     function(err, doc) {
@@ -104,7 +103,7 @@ router.route('/update')
        })
     }
     else if(req.body.tags == 'food_walks'){
-    	Comment.update({ '_id' :  '5ab715b369d5cf000401d511' } ,
+    	Comment.update({ '_id' :  '5ab7f327e6a9250004139143' } ,
     { $push: { 'food_walks' :  {'key' : req.body.key,'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
     {upsert: true},
     function(err, doc) {
@@ -116,7 +115,7 @@ router.route('/update')
 })
  }
  else if(req.body.tags == 'about'){
- 	  	Comment.update({ '_id' :  '5ab715b369d5cf000401d511' } ,
+ 	  	Comment.update({ '_id' :  '5ab7f327e6a9250004139143' } ,
     { $push: { 'about' :  {'key' : req.body.key,'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
     {upsert: true},
     function(err, doc) {
@@ -129,7 +128,7 @@ router.route('/update')
  }
 })
 .delete(function(req , res){
-    Comment.remove({ '_id' :  '5ab715b369d5cf000401d511' },
+    Comment.remove({ '_id' :  '5ab7f327e6a9250004139143' },
      function(err, comment) {
      if (err)
        res.send(err);
