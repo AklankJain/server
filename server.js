@@ -6,10 +6,7 @@ var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var Comment = require('./model/comments');
-const aws = require('aws-sdk');
-var fs = require('fs');
 
-aws.config.update({ accessKeyId: 'AKIAJHUORNHMQCQJNPRA', secretAccessKey: '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' });
 
 const S3_BUCKET = process.env.S3_BUCKET;
 
@@ -143,26 +140,26 @@ router.route('/update')
  });
 
 
-router.route('/pic')
-.get(function(req , res){
-  fs.readFile('ortlieb-logo.jpg', function (err, data) {
-  if (err) { res.send(err); }
+// router.route('/pic')
+// .get(function(req , res){
+//   fs.readFile('ortlieb-logo.jpg', function (err, data) {
+//   if (err) { res.send(err); }
 
-  var base64data = new Buffer(data, 'binary');
+//   var base64data = new Buffer(data, 'binary');
 
-  var s3 = new aws.S3();
-  s3.upload({
-    Bucket: 'hungry-media',
-    Key: 'del2.jpg',
-    Body: base64data,
-    ACL: 'public-read'
-  },function (resp) {
-    console.log(arguments);
-    console.log('Successfully uploaded package.');
-    res.json({ message : 'succesfully uploaded the file'})
-  });
-});
-});
+//   var s3 = new aws.S3();
+//   s3.upload({
+//     Bucket: 'hungry-media',
+//     Key: 'del2.jpg',
+//     Body: base64data,
+//     ACL: 'public-read'
+//   },function (resp) {
+//     console.log(arguments);
+//     console.log('Successfully uploaded package.');
+//     res.json({ message : 'succesfully uploaded the file'})
+//   });
+// });
+// });
 
 
 
