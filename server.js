@@ -6,6 +6,12 @@ var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var Comment = require('./model/comments');
+const aws = require('aws-sdk');
+var fs = require('fs');
+
+aws.config.update({ accessKeyId: 'AKIAJHUORNHMQCQJNPRA', secretAccessKey: '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' });
+
+const S3_BUCKET = process.env.S3_BUCKET;
 
 //and create our instances
 var app = express();
@@ -90,7 +96,7 @@ router.route('/update')
 
 	.put(function(req, res){
 		if (req.body.tags == 'hungry_rides') {
-	 Comment.update({ '_id' :  '5ab7f327e6a9250004139143' } ,
+	 Comment.update({ '_id' :  '5acb1ad1cc4eaf00041bb32e' } ,
     { $push: { 'hungry_rides' :  { 'key' : req.body.key, 'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
     {upsert: true},
     function(err, doc) {
@@ -103,7 +109,7 @@ router.route('/update')
        })
     }
     else if(req.body.tags == 'food_walks'){
-    	Comment.update({ '_id' :  '5ab7f327e6a9250004139143' } ,
+    	Comment.update({ '_id' :  '5acb1ad1cc4eaf00041bb32e' } ,
     { $push: { 'food_walks' :  {'key' : req.body.key,'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
     {upsert: true},
     function(err, doc) {
@@ -115,7 +121,7 @@ router.route('/update')
 })
  }
  else if(req.body.tags == 'about'){
- 	  	Comment.update({ '_id' :  '5ab7f327e6a9250004139143' } ,
+ 	  	Comment.update({ '_id' :  '5acb1ad1cc4eaf00041bb32e' } ,
     { $push: { 'about' :  {'key' : req.body.key,'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
     {upsert: true},
     function(err, doc) {
@@ -128,13 +134,38 @@ router.route('/update')
  }
 })
 .delete(function(req , res){
-    Comment.remove({ '_id' :  '5ab7f327e6a9250004139143' },
+    Comment.remove({ '_id' :  '5acb1ad1cc4eaf00041bb32e' },
      function(err, comment) {
      if (err)
        res.send(err);
      res.json({ message: 'Comment has been deleted' })
    })
  });
+
+
+router.route('/pic')
+.get(function(req , res){
+  fs.readFile('ortlieb-logo.jpg', function (err, data) {
+  if (err) { res.send(err); }
+
+  var base64data = new Buffer(data, 'binary');
+
+  var s3 = new aws.S3();
+  s3.upload({
+    Bucket: 'hungry-media',
+    Key: 'del2.jpg',
+    Body: base64data,
+    ACL: 'public-read'
+  },function (resp) {
+    console.log(arguments);
+    console.log('Successfully uploaded package.');
+    res.json({ message : 'succesfully uploaded the file'})
+  });
+});
+});
+
+
+
 
 // apply the routes to our application
 app.use('/api', router);
