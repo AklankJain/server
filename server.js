@@ -80,6 +80,45 @@ router.route('/comments')
     });
   });
 
+router.route('/delete')
+.get(function(req, res) {
+    //looks at our Comment Schema
+    Comment.find(function(err, comments) {
+      if (err)
+        res.send(err);
+      //responds with a json object of our database comments.
+      res.json(comments)
+    });
+  })
+  //post new comment to the database
+  .put(function(req, res){
+    if(req.body.tagged == 'hungry_rides'){
+      console.log(req.body)
+   Comment.findByIdAndUpdate('5acb1ad1cc4eaf00041bb32e' , 
+    {$pull: {'hungry_rides': { 'title' : req.body.titled }}},
+    function(err , model){
+      if(err){
+        console.log(err);
+      }
+      return res.json("Object removed , hungry_rides");
+    }
+    )
+ }
+ else if(req.body.tagged == 'food_walks'){
+  console.log(req.body)
+  Comment.findByIdAndUpdate('5acb1ad1cc4eaf00041bb32e' , 
+    {$pull: {'food_walks': { 'title' : req.body.titled }}},
+    function(err , model){
+      if(err){
+        console.log(err);
+      }
+      return res.json("Object removed , food_walks");
+    }
+    )
+ }
+    });
+
+
 router.route('/update')
 	 .get(function(req, res) {
     //looks at our Comment Schema
@@ -94,8 +133,8 @@ router.route('/update')
 	.put(function(req, res){
 		if (req.body.tags == 'hungry_rides') {
 	 Comment.update({ '_id' :  '5acb1ad1cc4eaf00041bb32e' } ,
-    { $push: { 'hungry_rides' :  { 'key' : req.body.key, 'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image} }}, 
-    {upsert: true},
+    { $push: { 'hungry_rides' :  {'key' : req.body.key,'title' : req.body.title , 'content' : req.body.content , 'tags' : req.body.tags , 'image' : req.body.image}} }, 
+    {upsert:true},
     function(err, doc) {
         if(err){
         console.log(err)
